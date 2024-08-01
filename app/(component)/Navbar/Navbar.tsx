@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -8,14 +8,10 @@ import { FaGithub, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 
 const navigation = [
-    // { name: 'Home', href: '/', current: true },
-    { name: 'About', href: '/About', current: false },
-    // { name: 'Education', href: '/Education', current: false },
-    { name: 'Experience', href: '/Experience', current: false },
-    // { name: 'Technical Skills', href: '/TechnicalSkills', current: false },
-    { name: 'Projects', href: '/Projects', current: false },
-    // { name: 'Personal Skills', href: '/PersonalSkills', current: false },
-    { name: 'Contact Me', href: '/ContactMe', current: false },
+    { name: 'About', href: '/#About', current: false },
+    { name: 'Experience', href: '/#Experience', current: false },
+    { name: 'Projects', href: '/#Projects', current: false },
+    { name: 'Contact Me', href: '/#ContactMe', current: false },
 ];
 
 function classNames(...classes: any) {
@@ -24,13 +20,25 @@ function classNames(...classes: any) {
 
 export default function Navbar() {
     const pathName = usePathname();
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    const handleScroll = () => {
+        const position = window.scrollY;
+        setScrollPosition(position);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
-        <Disclosure as="nav" className={`bg-gray-800 ${pathName==='/'?'fixed  z-[999999]':''} w-full`}>
+        <Disclosure as="nav" className={`transition-colors duration-500 ${pathName === '/' ? `fixed z-[999999] ${scrollPosition > 0 ? 'bg-gray-800' : 'bg-inherit'}` : 'bg-gray-800'} w-full`}>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
-                        {/* Mobile menu button*/}
                         <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Open main menu</span>
@@ -43,7 +51,7 @@ export default function Navbar() {
                             <h1 className='font-semibold text-lg'>
                                 <span className='text-red-500'>My</span>
                                 <span className='text-white'>port</span>
-                                <span className='text-blue-700 '>folio</span>
+                                <span className='text-blue-700'>folio</span>
                             </h1>
                         </Link>
                         <div className="hidden mx-auto md:block">
@@ -64,30 +72,28 @@ export default function Navbar() {
                             </div>
                         </div>
                     </div>
-                    {/* Cart button */}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
                         <Link
                             href={'https://wa.me/201553739206'}
-                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white "
+                            className="relative rounded-full bg-inherit p-1 text-gray-400 hover:text-white "
                         >
                             <FaWhatsapp />
                         </Link>
                         <Link
                             href={'mailto:abdelrahman.mamdouh.161020@gmail.com'}
-                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white ">
+                            className="relative rounded-full bg-inherit p-1 text-gray-400 hover:text-white ">
                             <IoMdMail />
                         </Link>
 
                         <Link
                             href={'https://github.com/Abdelrahman-Mamdouh16'}
-                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white "
+                            className="relative rounded-full bg-inherit p-1 text-gray-400 hover:text-white "
                         >
                             <FaGithub />
-
                         </Link>
                         <Link
                             href={'https://www.linkedin.com/in/abdelrahman-mamdouh161020/'}
-                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white "
+                            className="relative rounded-full bg-inherit p-1 text-gray-400 hover:text-white "
                         >
                             <FaLinkedin />
                         </Link>
